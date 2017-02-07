@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using System.Web.Http.Cors;
 
 namespace APM.WebAPI
 {
@@ -16,6 +17,11 @@ namespace APM.WebAPI
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+
+            var policy = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(policy);
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = 
+                new CamelCasePropertyNamesContractResolver();
 
             // Web API routes
             config.MapHttpAttributeRoutes();
